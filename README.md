@@ -8,16 +8,28 @@ We can examine the TODO part of the code under 8 main headings.
 2. Adjust the speed of the ego according to the position and speed of other cars. (lines 157-170)
 3. Determine the new lane line of ego.(171-187)
 4. Add the last 30 coordinates that were not used by the ego and 3 future coordinates in one vector.(lines 188-230)
-5. Shift the coordinates we have created for the spline to the cartesian coordinates (lines 231-241)
-6. Creating an axis using spline (lines 242-268)
-7. Move new coordinates to the coordinate system of the ego (lines 269-274)
-8. Forward the coordinates of the new line created to the simulator (lines 277-278)
+5. Shift the coordinates we have created for the spline to the cartesian coordinates (lines 232-242)
+6. Making an axis using spline (lines 243-269)
+7. Move new coordinates to the coordinate system of the ego (lines 270-275)
+8. Forward the coordinates of the new line created to the simulator (lines 276-280)
+
+
 [//]: # (Image References)
 
 [image1]: ./screenshots/stable.png "Stable motion"
 [image2]: ./screenshots/lane_change.png "Lane Change"
 
+## SPECIFICATIONS
+
 ![alt text][image1]
+
+1. The car is able to drive at least 4.32 miles without incident: The top right screen of the simulator shows the current/best miles driven without incident. Incidents include exceeding acceleration/jerk/speed, collision, and driving outside of the lanes.
+2. The car drives according to the speed limit: The car doesn't drive faster than the speed limit. Also the car isn't driving much slower than speed limit unless obstructed by traffic.
+3. Max Acceleration and Jerk are not Exceeded: The car does not exceed a total acceleration of 10 m/s^2 and a jerk of 10 m/s^3.
+4. Car does not have collisions: The car does not come into contact with any of the other cars on the road.
+5. The car stays in its lane, except for the time between changing lanes: The car doesn't spend more than a 3 second length out side the lane lanes during changing lanes, and every other time the car stays inside one of the 3 lanes on the right hand side of the road.
+6. The car is able to change lanes: The car is able to smoothly change lanes when it makes sense to do so, such as when behind a slower moving car and an adjacent lane is clear of other traffic.
+
 ![alt text][image2]
    
 ### Simulator.
@@ -29,7 +41,7 @@ sudo chmod u+x {simulator_file_name}
 ```
 
 ### Goals
-In this project your goal is to safely navigate around a virtual highway with other traffic that is driving +-10 MPH of the 50 MPH speed limit. You will be provided the car's localization and sensor fusion data, there is also a sparse map list of waypoints around the highway. The car should try to go as close as possible to the 50 MPH speed limit, which means passing slower traffic when possible, note that other cars will try to change lanes too. The car should avoid hitting other cars at all cost as well as driving inside of the marked road lanes at all times, unless going from one lane to another. The car should be able to make one complete loop around the 6946m highway. Since the car is trying to go 50 MPH, it should take a little over 5 minutes to complete 1 loop. Also the car should not experience total acceleration over 10 m/s^2 and jerk that is greater than 10 m/s^3.
+In this project goal is to safely navigate around a virtual highway with other traffic that is driving +-10 MPH of the 50 MPH speed limit. You will be provided the car's localization and sensor fusion data, there is also a sparse map list of waypoints around the highway. The car should try to go as close as possible to the 50 MPH speed limit, which means passing slower traffic when possible, note that other cars will try to change lanes too. The car should avoid hitting other cars at all cost as well as driving inside of the marked road lanes at all times, unless going from one lane to another. The car should be able to make one complete loop around the 6946m highway. Since the car is trying to go 50 MPH, it should take a little over 5 minutes to complete 1 loop. Also the car should not experience total acceleration over 10 m/s^2 and jerk that is greater than 10 m/s^3.
 
 #### The map of the highway is in data/highway_map.txt
 Each waypoint in the list contains  [x,y,s,dx,dy] values. x and y are the waypoint's map coordinate position, the s value is the distance along the road to get to that waypoint in meters, the dx and dy values define the unit normal vector pointing outward of the highway loop.
