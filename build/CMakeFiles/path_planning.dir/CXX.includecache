@@ -1048,28 +1048,6 @@ lapacke_mangling.h
 
 /mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/Eigen-3.3/Eigen/src/plugins/MatrixCwiseUnaryOps.h
 
-/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/cost.cpp
-cost.h
-/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/cost.h
-cmath
--
-functional
--
-iterator
--
-map
--
-string
--
-vector
--
-vehicle.h
-/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/vehicle.h
-
-/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/cost.h
-vehicle.h
-/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/vehicle.h
-
 /mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/helpers.h
 math.h
 -
@@ -1157,10 +1135,6 @@ json.hpp
 /mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/json.hpp
 spline.h
 /mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/spline.h
-vehicle.cpp
-/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/vehicle.cpp
-map
--
 
 /mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/spline.h
 cstdio
@@ -1170,29 +1144,5 @@ cassert
 vector
 -
 algorithm
--
-
-/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/vehicle.cpp
-vehicle.h
-/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/vehicle.h
-algorithm
--
-iterator
--
-map
--
-string
--
-vector
--
-cost.cpp
-/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/cost.cpp
-
-/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/vehicle.h
-map
--
-string
--
-vector
 -
 
