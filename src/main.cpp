@@ -108,6 +108,7 @@ int main() {
            // count time
            ego_time += 0.02;
            std::cout<<"time: "<<ego_time<<" / s :"<<car_s<<" / speed :"<<car_speed<<"\n";
+           // 1st PART
            // flags for nearby cars
            bool car_ahead = false;
            bool car_right = false;
@@ -153,6 +154,7 @@ int main() {
                if(a>0 && a<50){ car_left=true; } // Front
                if(a<0 && a>-20){ car_left=true; } //Back
              }
+             // 2nd PART
              // Speed control
              if(car_ahead==1 && lane_check==0 && speed>v){
                slow_down = true;
@@ -166,7 +168,7 @@ int main() {
            } else {
              speed+=1.0;
            }
-
+           // 3rd PART
            // preferred lane is lane_1 (middle)
            if(car_left==0 && car_ahead==0 && car_right==0){lane=1;}
            // no way to out of lane
@@ -182,7 +184,8 @@ int main() {
            if(car_ahead==1 && car_left==1 && car_right==0){lane += 1; car_left = false;}
            if(car_ahead==1 && car_left==1 && car_right==1){lane = lane;}
            // show that: Is there a car nearby
-           std::cout<<car_left<<car_ahead<<car_right<<"\n";
+           //std::cout<<car_left<<car_ahead<<car_right<<"\n";
+           // 4th PART
            // make a vectors for spline
            vector<double> sp_x;
            vector<double> sp_y;
@@ -220,11 +223,13 @@ int main() {
            vector<double> horizons = {50,80,120};
            for(int i=0;i<horizons.size();i++){
              int h = horizons[i];
+             // lane change takes place here
              vector<double> xy = getXY(car_s+h,(2+4*lane), map_waypoints_s, map_waypoints_x, map_waypoints_y);
 
              sp_x.push_back(xy[0]);
              sp_y.push_back(xy[1]);
            }
+           // 5th PART
            // Shift the coordinates we have created for
            //     the spline to the cartesian coordinates
            for (int i=0;i<sp_x.size(); i++)
@@ -235,6 +240,7 @@ int main() {
              sp_x[i] = (shift_x *cos(0-angle)-shift_y*sin(0-angle));
              sp_y[i] = (shift_x *sin(0-angle)+shift_y*cos(0-angle));
            }
+           // 6th PART
            // make a spline
            tk::spline sp;
            sp.set_points(sp_x, sp_y);
@@ -244,13 +250,13 @@ int main() {
              next_x_vals.push_back(previous_path_x[i]);
              next_y_vals.push_back(previous_path_y[i]);
            }
-           // set coordinates to create a line
+           // set x for drawing a line
            // the spline function will return the y coordinate
            double target_x = 40.0;
            double target_y = sp(target_x);
            // find the hypotenuse
            double target_dist = sqrt((target_x)*(target_x)+(target_y)*(target_y));
-           // The hypotenuse line can be divided into several
+           // The hypotenuse can be divided into several
            //    equal parts depending on the speed of the ego.
            double N = (target_dist/(.02*speed));
            double anchor = 0;
@@ -261,15 +267,18 @@ int main() {
              double track_y = sp(track_x);
              // move to the last position
              anchor = track_x;
+             // 7th PART
              // move the coordinates back to the ego's coordinate system
              double x = track_x;
              double y = track_y;
              track_x = pos_x + (x * cos(angle) - y * sin(angle));
              track_y = pos_y + (x * sin(angle) + y * cos(angle));
+             // 8th PART
              // forward the coordinates of the new line created to the simulator
              next_x_vals.push_back(track_x);
              next_y_vals.push_back(track_y);
            }
+           // END
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
