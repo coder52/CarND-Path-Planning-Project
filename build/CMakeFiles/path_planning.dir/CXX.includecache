@@ -1147,6 +1147,10 @@ string
 -
 vector
 -
+Eigen-3.3/Eigen/Core
+/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/Eigen-3.3/Eigen/Core
+Eigen-3.3/Eigen/QR
+/mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/Eigen-3.3/Eigen/QR
 helpers.h
 /mnt/c/Users/sahin/Documents/GitHub/CarND-Path-Planning-Project/src/helpers.h
 json.hpp
