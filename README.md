@@ -1,5 +1,19 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
+
+# Code Details
+
+We can examine the TODO part of the code under 8 main headings.
+1. Check if the lanes are empty by checking the positions of other cars around Ego. (lines 111-156)
+2. Adjust the speed of the ego according to the position and speed of other cars. (lines 157-170)
+3. Determine the new lane line of ego.(171-187)
+4. Add the last 30 coordinates that were not used by the ego and 3 future coordinates in one vector.(lines 188-230)
+5. Shift the coordinates we have created for the spline to the cartesian coordinates (lines 231-241)
+6. Creating an axis using spline (lines 242-268)
+7. Move new coordinates to the coordinate system of the ego (lines 269-274)
+8. Forward the coordinates of the new line created to the simulator (lines 277-278)
+
+![stable][./screenshots/stable.png]
    
 ### Simulator.
 You can download the Term3 Simulator which contains the Path Planning Project from the [releases tab (https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2).  
@@ -16,19 +30,6 @@ In this project your goal is to safely navigate around a virtual highway with ot
 Each waypoint in the list contains  [x,y,s,dx,dy] values. x and y are the waypoint's map coordinate position, the s value is the distance along the road to get to that waypoint in meters, the dx and dy values define the unit normal vector pointing outward of the highway loop.
 
 The highway's waypoints loop around so the frenet s value, distance along the road, goes from 0 to 6945.554.
-
-# Code Details
-
-We can examine the TODO part of the code under 8 main headings.
-1. Check if the lanes are empty by checking the positions of other cars around Ego. (lines 111-156)
-2. Adjust the speed of the ego according to the position and speed of other cars. (lines 157-170)
-3. Determine the new lane line of ego.(171-187)
-4. Add the last 30 coordinates that were not used by the ego and 3 future coordinates in one vector.(lines 188-230)
-5. Shift the coordinates we have created for the spline to the cartesian coordinates (lines 231-241)
-6. Creating an axis using spline (lines 242-268)
-7. Move new coordinates to the coordinate system of the ego (lines 269-274)
-8. Forward the coordinates of the new line created to the simulator (lines 277-278)
-
 
 ## Basic Build Instructions
 
