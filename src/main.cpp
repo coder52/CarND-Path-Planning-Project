@@ -9,16 +9,12 @@
 #include "json.hpp"
 #include "spline.h"
 
-#include "vehicle.cpp"
-#include <map>
-
 // for convenience
 using nlohmann::json;
 using std::string;
 using std::vector;
 
-using std::map;
-
+// globals
 float ego_time = 0.0;
 float speed = 0.0;
 int lane = 1;
@@ -108,14 +104,16 @@ int main() {
            * TODO: define a path made up of (x,y) points that the car will visit
            *   sequentially every .02 seconds
            */
+           //
+           // count time
            ego_time += 0.02;
            std::cout<<"time: "<<ego_time<<" / s :"<<car_s<<" / speed :"<<car_speed<<"\n";
-
+           // flags for nearby cars
            bool car_ahead = false;
            bool car_right = false;
            bool car_left = false;
            bool slow_down = false;
-
+           // for all other cars on the road
            for(int i=0;i<sensor_fusion.size();i++){
              double id = sensor_fusion[i][0];
              double x = sensor_fusion[i][1];
@@ -124,18 +122,17 @@ int main() {
              double vy = sensor_fusion[i][4];
              double s = sensor_fusion[i][5];
              double ln = sensor_fusion[i][6];
-
+             //calculate speed of car (speed will little different after one loop)
              double v = sqrt(vx*vx + vy*vy)-.3;
              if(v<=0){v=0.01;}
-
+             // use cars position after one loop
              double cr_s = car_s+2.5;
-
+             // give number each lane by lane range
              int lane_num;
-
              if(ln<=4 && ln>=0 ) {lane_num=0;}
              if(ln>=4 && ln<=8) {lane_num=1;}
              if(ln>=8 && ln<=12) {lane_num=2;}
-             //std::cout<<"car_s-s/ln "<<s-cr_s<<" / "<<lane_num<<"\n";
+             // find lane of the car
              int lane_check =  lane_num-lane;
              // Check ego's lane
              if(lane_check==0){
@@ -147,72 +144,63 @@ int main() {
              // Check right lane
              if(lane_check==1){
                double a=s-cr_s;
-               if(a>0 && a<50){ car_right=true; }
-               if(a<0 && a>-20){ car_right=true; }
+               if(a>0 && a<50){ car_right=true; } // Front
+               if(a<0 && a>-20){ car_right=true; } // Back
              }
              // Check left lane
              if(lane_check==-1){
                double a=s-cr_s;
-               if(a>0 && a<50){ car_left=true; }
-               if(a<0 && a>-20){ car_left=true; }
+               if(a>0 && a<50){ car_left=true; } // Front
+               if(a<0 && a>-20){ car_left=true; } //Back
              }
              // Speed control
              if(car_ahead==1 && lane_check==0 && speed>v){
                slow_down = true;
              }
            }
+           // tune the speed of the ego
            if(slow_down){
-             speed-=0.3;
+             speed-=0.5;
            } else if(speed > 21){
              speed=22.0;
            } else {
              speed+=1.0;
            }
 
-
-
-
-
-
-
-
-
-
-           // preferred lane 1
+           // preferred lane is lane_1 (middle)
            if(car_left==0 && car_ahead==0 && car_right==0){lane=1;}
            // no way to out of lane
            if(lane==0){car_left=true;}
            if(lane==2){car_right=true;}
-           // all conditions
+           // all other conditions
            if(car_ahead==0 && car_left==0 && car_right==0){lane=1;}
            if(car_ahead==0 && car_left==1 && car_right==0){lane=lane;}
            if(car_ahead==0 && car_left==0 && car_right==1){lane=lane;}
            if(car_ahead==0 && car_left==1 && car_right==1){lane=lane;}
-           if(car_ahead==1 && car_left==0 && car_right==0){lane -= 1;}
-           if(car_ahead==1 && car_left==0 && car_right==1){lane -= 1;}
-           if(car_ahead==1 && car_left==1 && car_right==0){lane += 1;}
+           if(car_ahead==1 && car_left==0 && car_right==0){lane -= 1; car_right = false;}
+           if(car_ahead==1 && car_left==0 && car_right==1){lane -= 1; car_right = false;}
+           if(car_ahead==1 && car_left==1 && car_right==0){lane += 1; car_left = false;}
            if(car_ahead==1 && car_left==1 && car_right==1){lane = lane;}
-
+           // show that: Is there a car nearby
            std::cout<<car_left<<car_ahead<<car_right<<"\n";
-
+           // make a vectors for spline
            vector<double> sp_x;
            vector<double> sp_y;
-
-           int prev_size = previous_path_x.size();
 
            double pos_x;
            double pos_y;
            double angle;
            int path_size = previous_path_x.size();
-
+           // set position and angle of the ego at start
            if (path_size == 0) {
              pos_x = car_x;
              pos_y = car_y;
              angle = deg2rad(car_yaw);
-
+             // add position in spline koordinates
              sp_x.push_back(pos_x);
              sp_y.push_back(pos_y);
            } else {
+             // add unused last 30 coordinates to spline after motion
              for(int i=30;i>0;i--){
                pos_x = previous_path_x[path_size-(1+i)];
                pos_y = previous_path_y[path_size-(1+i)];
@@ -220,6 +208,7 @@ int main() {
                sp_x.push_back(pos_x);
                sp_y.push_back(pos_y);
              }
+             // set position and angle of the ego when it moving
              pos_x = previous_path_x[path_size-1];
              pos_y = previous_path_y[path_size-1];
 
@@ -227,12 +216,8 @@ int main() {
              double pos_y2 = previous_path_y[path_size-2];
              angle = atan2(pos_y - pos_y2, pos_x - pos_x2);
            }
-
-           //sp_x.push_back(pos_x);
-           //sp_y.push_back(pos_y);
-
+           // set next coordinates at far for making soft shift between lanes.
            vector<double> horizons = {50,80,120};
-
            for(int i=0;i<horizons.size();i++){
              int h = horizons[i];
              vector<double> xy = getXY(car_s+h,(2+4*lane), map_waypoints_s, map_waypoints_x, map_waypoints_y);
@@ -240,7 +225,8 @@ int main() {
              sp_x.push_back(xy[0]);
              sp_y.push_back(xy[1]);
            }
-
+           // Shift the coordinates we have created for
+           //     the spline to the cartesian coordinates
            for (int i=0;i<sp_x.size(); i++)
            {
              double shift_x = sp_x[i]-pos_x;
@@ -249,46 +235,41 @@ int main() {
              sp_x[i] = (shift_x *cos(0-angle)-shift_y*sin(0-angle));
              sp_y[i] = (shift_x *sin(0-angle)+shift_y*cos(0-angle));
            }
-
            // make a spline
            tk::spline sp;
            sp.set_points(sp_x, sp_y);
-
-
+           // Add coordinates not used by ego
            for(int i=0;i<previous_path_x.size(); i++)
            {
              next_x_vals.push_back(previous_path_x[i]);
              next_y_vals.push_back(previous_path_y[i]);
            }
-
-
-
+           // set coordinates to create a line
+           // the spline function will return the y coordinate
            double target_x = 40.0;
            double target_y = sp(target_x);
+           // find the hypotenuse
            double target_dist = sqrt((target_x)*(target_x)+(target_y)*(target_y));
+           // The hypotenuse line can be divided into several
+           //    equal parts depending on the speed of the ego.
            double N = (target_dist/(.02*speed));
-
            double anchor = 0;
            for(int i=1; i<=50-previous_path_x.size();i++)
            {
-
+             // set coordinates for spline
              double track_x = anchor+target_x/N;
              double track_y = sp(track_x);
-
+             // move to the last position
              anchor = track_x;
-
+             // move the coordinates back to the ego's coordinate system
              double x = track_x;
              double y = track_y;
-
              track_x = pos_x + (x * cos(angle) - y * sin(angle));
              track_y = pos_y + (x * sin(angle) + y * cos(angle));
-
+             // forward the coordinates of the new line created to the simulator
              next_x_vals.push_back(track_x);
              next_y_vals.push_back(track_y);
            }
-
-
-
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
