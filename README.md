@@ -15,9 +15,10 @@ We can examine the TODO part of the code under 8 main headings.
 [//]: # (Image References)
 
 [image1]: ./screenshots/stable.png "Stable motion"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
+[image2]: ./screenshots/lane_change.png "Lane Change"
 
 ![alt text][image1]
+![alt text][image2]
    
 ### Simulator.
 You can download the Term3 Simulator which contains the Path Planning Project from the [releases tab (https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2).  
